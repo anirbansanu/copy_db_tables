@@ -1,0 +1,4 @@
+units - Column mismatch:
+SOURCE: ['id', 'business_id', 'actual_name', 'short_name', 'allow_decimal', 'default_value', 'base_unit_id', 'base_unit_multiplier', 'created_by', 'deleted_at', 'created_at', 'updated_at']
+TARGET: ['id', 'business_id', 'actual_name', 'short_name', 'allow_decimal', 'default_value', 'base_unit_id', 'base_unit_multiplier', 'created_by', 'user_defined_barcodeqty', 'barcode_qty', 'deleted_at', 'created_at', 'updated_at']
+

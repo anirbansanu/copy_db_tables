@@ -1,0 +1,3 @@
+barcodes - 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`srihari_db`.`barcodes`, CONSTRAINT `barcodes_business_id_foreign` FOREIGN KEY (`business_id`) REFERENCES `business` (`id`) ON DELETE CASCADE)
+tax_rates - Skipped by user
+tax_regions - Skipped by user
