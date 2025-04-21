@@ -1,12 +1,27 @@
 import mysql.connector
 from mysql.connector import errorcode
 import logging
+import os
+from datetime import datetime
 
 # ---------- Logging Setup ----------
+# Create a timestamped folder for logs
+timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+log_dir = os.path.join(os.getcwd(), 'logs', timestamp)
+os.makedirs(log_dir, exist_ok=True)
+
+# Define log file paths
+success_log_path = os.path.join(log_dir, 'successful_tables.log')
+failure_log_path = os.path.join(log_dir, 'failed_tables.log')
+mismatch_log_path = os.path.join(log_dir, 'column_mismatches.log')
+
+# Open log files
+success_log = open(success_log_path, 'w')
+failure_log = open(failure_log_path, 'w')
+mismatch_log = open(mismatch_log_path, 'w')
+
 logging.basicConfig(level=logging.INFO)
-success_log = open('successful_tables.log', 'w')
-failure_log = open('failed_tables.log', 'w')
-mismatch_log = open('column_mismatches.log', 'w')
+logging.info(f"Logs will be saved in: {log_dir}")
 
 # ---------- MySQL Connection Config ----------
 config = {
