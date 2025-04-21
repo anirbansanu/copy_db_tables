@@ -25,13 +25,16 @@ logging.info(f"Logs will be saved in: {log_dir}")
 
 # ---------- MySQL Connection Config ----------
 config = {
-    'user': 'your_user',
-    'password': 'your_password',
+    'user': 'root',
+    'password': 'root',
     'host': 'localhost',
 }
 
 source_db = 'orbite_db'
 target_db = 'srihari_db'
+
+# List of tables to copy
+tables_to_copy = ['barcodes', 'gst_tax_master', 'tax_rates' , 'tax_regions' , 'group']  # Replace with your table names
 
 # ---------- Helper Functions ----------
 def log_file(file, message):
@@ -54,12 +57,17 @@ try:
     conn = mysql.connector.connect(**config)
     cursor = conn.cursor()
 
-    # Get all tables in source DB
-    cursor.execute(f"SELECT table_name FROM information_schema.tables WHERE table_schema = %s", (source_db,))
-    source_tables = [row[0] for row in cursor.fetchall()]
-
-    for table in source_tables:
+    for table in tables_to_copy:
         try:
+            # Check if table exists in source DB
+            cursor.execute(f"""
+                SELECT COUNT(*) FROM information_schema.tables
+                WHERE table_schema = %s AND table_name = %s
+            """, (source_db, table))
+            if cursor.fetchone()[0] == 0:
+                log_file(failure_log, f"{table} - Does not exist in source DB")
+                continue
+
             # Check if table exists in target DB
             cursor.execute(f"""
                 SELECT COUNT(*) FROM information_schema.tables
