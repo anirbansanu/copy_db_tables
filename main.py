@@ -109,7 +109,7 @@ class TableCopier:
                         self.log_file(self.mismatch_log, f"{table} - Column mismatch:\nSOURCE: {source_cols}\nTARGET: {target_cols}\n")
                         continue
 
-                    if 'business_id' not in source_cols:
+                    if self.filter_condition.strip() and 'business_id' not in source_cols:
                         self.log_file(self.failure_log, f"{table} - No 'business_id' column")
                         continue
 
@@ -138,7 +138,7 @@ class TableCopier:
 
 
 if __name__ == "__main__":
-    # MySQL Connection Config
+    
     config = {
         'user': 'root',
         'password': 'root',
@@ -147,8 +147,8 @@ if __name__ == "__main__":
 
     source_db = 'orbite_db'
     target_db = 'srihari_db'
-    tables_to_copy = ['customer_details','supplier_details','vendor_details']
-    filter_condition = ""  # WHERE business_id IN (43, 44)
+    tables_to_copy = ['customer_type']
+    filter_condition = "WHERE business_id IN (43, 44)"  # WHERE business_id IN (43, 44)
 
     copier = TableCopier(config, source_db, target_db, tables_to_copy, filter_condition)
     copier.copy_tables()

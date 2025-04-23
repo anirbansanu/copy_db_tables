@@ -1,31 +1,29 @@
+from datetime import datetime
+import mysql.connector
+import os
+import logging
+
 class TableCopier:
-    def __init__(self, config, source_db, target_db, tables_to_copy, filter_condition):
+    def __init__(self, config, source_db, target_db, tables_to_copy):
         self.config = config
         self.source_db = source_db
         self.target_db = target_db
         self.tables_to_copy = tables_to_copy
-        self.filter_condition = filter_condition
         self.BATCH_SIZE = 1000
         self.setup_logging()
 
     def setup_logging(self):
-        # Create a timestamped folder for logs
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
         self.log_dir = os.path.join(os.getcwd(), 'logs', timestamp)
         os.makedirs(self.log_dir, exist_ok=True)
 
-        # Define log file paths
         self.success_log_path = os.path.join(self.log_dir, 'successful_tables.log')
         self.failure_log_path = os.path.join(self.log_dir, 'failed_tables.log')
         self.mismatch_log_path = os.path.join(self.log_dir, 'column_mismatches.log')
 
-        # Open log files
         self.success_log = open(self.success_log_path, 'w')
         self.failure_log = open(self.failure_log_path, 'w')
         self.mismatch_log = open(self.mismatch_log_path, 'w')
-
-        logging.basicConfig(level=logging.INFO)
-        logging.info(f"Logs will be saved in: {self.log_dir}")
 
     def log_file(self, file, message):
         file.write(message + '\n')
@@ -39,62 +37,91 @@ class TableCopier:
         """, (db, table_name))
         return [row[0] for row in cursor.fetchall()]
 
-    def copy_parent_and_child(self, cursor, parent_table, child_table, parent_key, child_foreign_key):
-        """
-        Copies parent records and their related child records while maintaining foreign key relationships.
+    def check_column_match(self, cursor, table_info):
+        parent_table = table_info['parent_table']
+        match_columns = table_info.get('match_columns', False)
 
-        :param cursor: MySQL cursor object
-        :param parent_table: Name of the parent table (e.g., 'grc')
-        :param child_table: Name of the child table (e.g., 'grc_items')
-        :param parent_key: Primary key column in the parent table (e.g., 'id')
-        :param child_foreign_key: Foreign key column in the child table (e.g., 'grc_id')
-        """
-        # Step 1: Copy parent records and track ID mapping
+        if match_columns:
+            source_cols = self.get_table_columns(cursor, self.source_db, parent_table)
+            target_cols = self.get_table_columns(cursor, self.target_db, parent_table)
+
+            if set(source_cols) != set(target_cols):
+                if set(source_cols).issubset(set(target_cols)):
+                    self.log_file(
+                        self.mismatch_log,
+                        f"Table: {parent_table} - Target table has extra columns.\n"
+                        f"Source Columns: {source_cols}\nTarget Columns: {target_cols}"
+                    )
+                    return True
+                else:
+                    self.log_file(
+                        self.mismatch_log,
+                        f"Table: {parent_table} - Source table has extra columns. Skipping copy.\n"
+                        f"Source Columns: {source_cols}\nTarget Columns: {target_cols}"
+                    )
+                    return False
+        return True
+
+    def copy_parent_and_child(self, cursor, table_info):
+        parent_table = table_info['parent_table']
+        child_table = table_info.get('child_table')
+        parent_key = table_info['parent_key']
+        child_foreign_key = table_info.get('child_foreign_key')
+        filter_for_parent = table_info.get('filter_for_parent', '')
+        filter_for_child = table_info.get('filter_for_child', '')
+
+        cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
         cursor.execute(f"""
-            SELECT * FROM `{self.source_db}`.`{parent_table}` {self.filter_condition}
+            SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
         """)
         parent_rows = cursor.fetchall()
-        parent_columns = [desc[0] for desc in cursor.description]
+        parent_columns = [f"`{desc[0]}`" for desc in cursor.description]
 
-        # Insert parent records into the target DB
         placeholders = ', '.join(['%s'] * len(parent_columns))
         insert_query = f"""
             INSERT INTO `{self.target_db}`.`{parent_table}` ({', '.join(parent_columns)}) VALUES ({placeholders})
         """
         cursor.executemany(insert_query, parent_rows)
+        # Log success for parent table
+        self.log_file(self.success_log, f"Parent table '{parent_table}' copied successfully.")
 
-        # Fetch the new IDs for the inserted parent records
         old_to_new_id_map = {}
         for old_row in parent_rows:
-            old_id = old_row[parent_columns.index(parent_key)]
-            cursor.execute(f"SELECT `{parent_key}` FROM `{self.target_db}`.`{parent_table}` WHERE `{parent_key}` = LAST_INSERT_ID()")
+            old_id = old_row[parent_columns.index(f"`{parent_key}`")]
+            cursor.execute(f"SELECT LAST_INSERT_ID()")
             new_id = cursor.fetchone()[0]
             old_to_new_id_map[old_id] = new_id
 
-        # Step 2: Copy child records with updated foreign keys
         if child_table:
+            cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{child_table}`")
             for old_id, new_id in old_to_new_id_map.items():
-                cursor.execute(f"""
-                    SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s
-                """, (old_id,))
+                if filter_for_child:
+                    query = f"""
+                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND ({filter_for_child})
+                    """
+                else:
+                    query = f"""
+                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s
+                    """
+                cursor.execute(query, (old_id,))
                 child_rows = cursor.fetchall()
                 if not child_rows:
                     continue
 
-                child_columns = [desc[0] for desc in cursor.description]
+                child_columns = [f"`{desc[0]}`" for desc in cursor.description]
                 placeholders = ', '.join(['%s'] * len(child_columns))
                 insert_query = f"""
                     INSERT INTO `{self.target_db}`.`{child_table}` ({', '.join(child_columns)}) VALUES ({placeholders})
                 """
-
-                # Update the foreign key in child rows
                 updated_child_rows = []
                 for row in child_rows:
                     row = list(row)
-                    row[child_columns.index(child_foreign_key)] = new_id
+                    row[child_columns.index(f"`{child_foreign_key}`")] = new_id
                     updated_child_rows.append(row)
 
                 cursor.executemany(insert_query, updated_child_rows)
+            # Log success for child table
+            self.log_file(self.success_log, f"Child table '{child_table}' copied successfully.")
 
     def copy_tables(self):
         try:
@@ -102,20 +129,33 @@ class TableCopier:
             cursor = conn.cursor()
 
             for table_info in self.tables_to_copy:
-                parent_table = table_info['parent_table']
-                child_table = table_info.get('child_table')  # Optional
-                parent_key = table_info['parent_key']
-                child_foreign_key = table_info.get('child_foreign_key')  # Optional
+                if not self.check_column_match(cursor, table_info):
+                    continue
 
-                if child_table:
-                    self.copy_parent_and_child(cursor, parent_table, child_table, parent_key, child_foreign_key)
+                if table_info.get('children', False):
+                    self.copy_parent_and_child(cursor, table_info)
                 else:
-                    # Copy standalone table
-                    self.copy_table_data_in_batches(cursor, self.source_db, self.target_db, parent_table)
+                    parent_table = table_info['parent_table']
+                    filter_for_parent = table_info.get('filter_for_parent', '')
+                    
+                    cursor.execute(f"""
+                        SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
+                    """)
+                    rows = cursor.fetchall()
+                    columns = [f"`{desc[0]}`" for desc in cursor.description]  # Enclose column names in backticks
+                    placeholders = ', '.join(['%s'] * len(columns))
 
+                    cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
+                    insert_query = f"""
+                        INSERT INTO `{self.target_db}`.`{parent_table}` ({', '.join(columns)}) VALUES ({placeholders})
+                    """
+                    cursor.executemany(insert_query, rows)
+                    # Log success for standalone table
+                    self.log_file(self.success_log, f"Standalone table '{parent_table}' copied successfully.")
             conn.commit()
 
         except mysql.connector.Error as err:
+            self.log_file(self.failure_log, f"Error: {str(err)}")
             print(f"Connection error: {err}")
 
         finally:
@@ -126,33 +166,36 @@ class TableCopier:
             self.mismatch_log.close()
 
 
-# ---------- Main Execution ----------
 if __name__ == "__main__":
-    # MySQL Connection Config
     config = {
         'user': 'root',
         'password': 'root',
         'host': 'localhost',
+        'database':'orbite_db'
     }
 
     source_db = 'orbite_db'
     target_db = 'srihari_db'
 
-    # Define tables to copy with parent-child relationships
     tables_to_copy = [
         {
             'parent_table': 'grc',
+            'children': True,
             'child_table': 'grc_items',
             'parent_key': 'id',
-            'child_foreign_key': 'grc_id'
+            'child_foreign_key': 'grc_id',
+            'filter_for_parent': 'WHERE business_id IN (43, 44)',
+            'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))',
+            'match_columns': True
         },
         {
-            'parent_table': 'item_name',  # Standalone table
-            'parent_key': 'id'
+            'parent_table': 'items',
+            'children': False,
+            'parent_key': 'id',
+            'filter_for_parent': 'WHERE business_id IN (43, 44)',
+            'match_columns': True
         }
     ]
 
-    filter_condition = "WHERE business_id IN (43, 44)"  # Change this filter as needed
-
-    copier = TableCopier(config, source_db, target_db, tables_to_copy, filter_condition)
+    copier = TableCopier(config, source_db, target_db, tables_to_copy)
     copier.copy_tables()
