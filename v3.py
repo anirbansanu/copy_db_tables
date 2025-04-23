@@ -37,6 +37,18 @@ class TableCopier:
         """, (db, table_name))
         return [row[0] for row in cursor.fetchall()]
 
+    def get_table_row_count(self, cursor, db, table_name, filter_condition=''):
+        checkWhereIsInString = filter_condition.find('WHERE')
+        if checkWhereIsInString == -1:
+            filter_condition = f"WHERE {filter_condition}"
+        elif checkWhereIsInString == 0:
+            filter_condition = f"{filter_condition}"
+        else:
+            filter_condition = f"WHERE {filter_condition}"  
+        query = f"SELECT COUNT(*) FROM `{db}`.`{table_name}` {filter_condition}"
+        cursor.execute(query)
+        return cursor.fetchone()[0]
+
     def check_column_match(self, cursor, table_info):
         parent_table = table_info['parent_table']
         match_columns = table_info.get('match_columns', False)
@@ -70,10 +82,22 @@ class TableCopier:
         filter_for_parent = table_info.get('filter_for_parent', '')
         filter_for_child = table_info.get('filter_for_child', '')
 
+        # Display table name and row count
+        parent_row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
+        print(f"Table: {parent_table}, Rows: {parent_row_count}")
+        user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n): ").strip().lower()
+        if user_input != 'y':
+            print(f"Skipping table '{parent_table}'.")
+            self.log_file(self.failure_log, f"Table '{parent_table}' skipped by user.")
+            return
+
         cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
         cursor.execute(f"""
             SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
         """)
+        # print(f"""
+        #     SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
+        # """)
         parent_rows = cursor.fetchall()
         parent_columns = [f"`{desc[0]}`" for desc in cursor.description]
 
@@ -82,7 +106,6 @@ class TableCopier:
             INSERT INTO `{self.target_db}`.`{parent_table}` ({', '.join(parent_columns)}) VALUES ({placeholders})
         """
         cursor.executemany(insert_query, parent_rows)
-        # Log success for parent table
         self.log_file(self.success_log, f"Parent table '{parent_table}' copied successfully.")
 
         old_to_new_id_map = {}
@@ -93,12 +116,23 @@ class TableCopier:
             old_to_new_id_map[old_id] = new_id
 
         if child_table:
+            child_row_count = self.get_table_row_count(cursor, self.source_db, child_table, filter_for_child)
+            print(f"Child Table: {child_table}, Rows: {child_row_count}")
+            user_input = input(f"Do you want to copy the child table '{child_table}'? (y/n): ").strip().lower()
+            if user_input != 'y':
+                print(f"Skipping child table '{child_table}'.")
+                self.log_file(self.failure_log, f"Child table '{child_table}' skipped by user.")
+                return
+
             cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{child_table}`")
             for old_id, new_id in old_to_new_id_map.items():
                 if filter_for_child:
                     query = f"""
-                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND ({filter_for_child})
+                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND {filter_for_child}
                     """
+                    # print(f"""
+                    #     SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND {filter_for_child}
+                    # """)
                 else:
                     query = f"""
                         SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s
@@ -109,6 +143,7 @@ class TableCopier:
                     continue
 
                 child_columns = [f"`{desc[0]}`" for desc in cursor.description]
+                # print(f"Child Columns: {child_columns}")
                 placeholders = ', '.join(['%s'] * len(child_columns))
                 insert_query = f"""
                     INSERT INTO `{self.target_db}`.`{child_table}` ({', '.join(child_columns)}) VALUES ({placeholders})
@@ -116,11 +151,10 @@ class TableCopier:
                 updated_child_rows = []
                 for row in child_rows:
                     row = list(row)
-                    row[child_columns.index(f"`{child_foreign_key}`")] = new_id
+                    # row[child_columns.index(f"`{child_foreign_key}`")] = new_id
                     updated_child_rows.append(row)
-
+                
                 cursor.executemany(insert_query, updated_child_rows)
-            # Log success for child table
             self.log_file(self.success_log, f"Child table '{child_table}' copied successfully.")
 
     def copy_tables(self):
@@ -137,21 +171,29 @@ class TableCopier:
                 else:
                     parent_table = table_info['parent_table']
                     filter_for_parent = table_info.get('filter_for_parent', '')
-                    
+
+                    # Display table name and row count
+                    row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
+                    print(f"Table: {parent_table}, Rows: {row_count}")
+                    user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n): ").strip().lower()
+                    if user_input != 'y':
+                        print(f"Skipping table '{parent_table}'.")
+                        self.log_file(self.failure_log, f"Table '{parent_table}' skipped by user.")
+                        continue
+
                     cursor.execute(f"""
                         SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
                     """)
                     rows = cursor.fetchall()
-                    columns = [f"`{desc[0]}`" for desc in cursor.description]  # Enclose column names in backticks
+                    columns = [f"`{desc[0]}`" for desc in cursor.description]
                     placeholders = ', '.join(['%s'] * len(columns))
-
                     cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
                     insert_query = f"""
                         INSERT INTO `{self.target_db}`.`{parent_table}` ({', '.join(columns)}) VALUES ({placeholders})
                     """
                     cursor.executemany(insert_query, rows)
-                    # Log success for standalone table
                     self.log_file(self.success_log, f"Standalone table '{parent_table}' copied successfully.")
+
             conn.commit()
 
         except mysql.connector.Error as err:
@@ -171,7 +213,7 @@ if __name__ == "__main__":
         'user': 'root',
         'password': 'root',
         'host': 'localhost',
-        'database':'orbite_db'
+        'database': 'orbite_db'
     }
 
     source_db = 'orbite_db'
@@ -181,11 +223,20 @@ if __name__ == "__main__":
         {
             'parent_table': 'grc',
             'children': True,
-            'child_table': 'grc_items',
+            'child_tables': [
+                {
+                    'child_table': 'grc_items',
+                    'child_foreign_key': 'grc_id',
+                    'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
+                },
+                {
+                    'child_table': 'grc_documents',
+                    'child_foreign_key': 'grc_id',
+                    'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
+                }
+            ],
             'parent_key': 'id',
-            'child_foreign_key': 'grc_id',
             'filter_for_parent': 'WHERE business_id IN (43, 44)',
-            'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))',
             'match_columns': True
         },
         {
