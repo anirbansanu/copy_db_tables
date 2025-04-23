@@ -76,11 +76,9 @@ class TableCopier:
 
     def copy_parent_and_child(self, cursor, table_info):
         parent_table = table_info['parent_table']
-        child_table = table_info.get('child_table')
+        child_tables = table_info.get('child_tables', [])
         parent_key = table_info['parent_key']
-        child_foreign_key = table_info.get('child_foreign_key')
         filter_for_parent = table_info.get('filter_for_parent', '')
-        filter_for_child = table_info.get('filter_for_child', '')
 
         # Display table name and row count
         parent_row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
@@ -91,13 +89,11 @@ class TableCopier:
             self.log_file(self.failure_log, f"Table '{parent_table}' skipped by user.")
             return
 
+        # Copy parent table
         cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
         cursor.execute(f"""
             SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
         """)
-        # print(f"""
-        #     SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
-        # """)
         parent_rows = cursor.fetchall()
         parent_columns = [f"`{desc[0]}`" for desc in cursor.description]
 
@@ -108,6 +104,7 @@ class TableCopier:
         cursor.executemany(insert_query, parent_rows)
         self.log_file(self.success_log, f"Parent table '{parent_table}' copied successfully.")
 
+        # Map old IDs to new IDs
         old_to_new_id_map = {}
         for old_row in parent_rows:
             old_id = old_row[parent_columns.index(f"`{parent_key}`")]
@@ -115,24 +112,26 @@ class TableCopier:
             new_id = cursor.fetchone()[0]
             old_to_new_id_map[old_id] = new_id
 
-        if child_table:
+        # Copy child tables
+        for child_info in child_tables:
+            child_table = child_info['child_table']
+            child_foreign_key = child_info['child_foreign_key']
+            filter_for_child = child_info.get('filter_for_child', '')
+
             child_row_count = self.get_table_row_count(cursor, self.source_db, child_table, filter_for_child)
             print(f"Child Table: {child_table}, Rows: {child_row_count}")
             user_input = input(f"Do you want to copy the child table '{child_table}'? (y/n): ").strip().lower()
             if user_input != 'y':
                 print(f"Skipping child table '{child_table}'.")
                 self.log_file(self.failure_log, f"Child table '{child_table}' skipped by user.")
-                return
+                continue
 
             cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{child_table}`")
             for old_id, new_id in old_to_new_id_map.items():
                 if filter_for_child:
                     query = f"""
-                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND {filter_for_child}
+                        SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND ({filter_for_child})
                     """
-                    # print(f"""
-                    #     SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s AND {filter_for_child}
-                    # """)
                 else:
                     query = f"""
                         SELECT * FROM `{self.source_db}`.`{child_table}` WHERE `{child_foreign_key}` = %s
@@ -143,7 +142,6 @@ class TableCopier:
                     continue
 
                 child_columns = [f"`{desc[0]}`" for desc in cursor.description]
-                # print(f"Child Columns: {child_columns}")
                 placeholders = ', '.join(['%s'] * len(child_columns))
                 insert_query = f"""
                     INSERT INTO `{self.target_db}`.`{child_table}` ({', '.join(child_columns)}) VALUES ({placeholders})
@@ -153,7 +151,7 @@ class TableCopier:
                     row = list(row)
                     # row[child_columns.index(f"`{child_foreign_key}`")] = new_id
                     updated_child_rows.append(row)
-                
+
                 cursor.executemany(insert_query, updated_child_rows)
             self.log_file(self.success_log, f"Child table '{child_table}' copied successfully.")
 
@@ -230,7 +228,7 @@ if __name__ == "__main__":
                     'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
                 },
                 {
-                    'child_table': 'grc_documents',
+                    'child_table': 'grc_calculated_values',
                     'child_foreign_key': 'grc_id',
                     'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
                 }
