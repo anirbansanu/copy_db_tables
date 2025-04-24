@@ -1,5 +1,663 @@
 [
+    {
+        "parent_table": "account_types",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "accounts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "acctrnvouchermaster",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "activity_log",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "add_term",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "attribute",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "attribute_item_map",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "barcodes",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "bookings",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "brands",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "business_locations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "cash_registers",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "categories",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "charge_masters",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "contacts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "credit_note",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "credit_note_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "credit_note_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "customer_groups",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "customer_type",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "customer_type1",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "dashboard_configurations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "debit_note_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "debit_note_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "debit_notes",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "delivery_challan_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "delivery_challan_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "delivery_challans",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "designations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "discounts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
     
+    {
+        "parent_table": "document_and_notes",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_allowances_and_deductions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_attendances",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_documents",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_holidays",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_kb",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_leave_types",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_leaves",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_messages",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_payroll_groups",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_reminders",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_shifts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "essentials_to_dos",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "expense_categories",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "goods_type",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grc",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grc_calculated_values",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grn",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grn_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "group",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grt",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grt_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grt_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "gst_tax_master",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "hsn",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "hsn_tax_slabs",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "inter_company_customers",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "invoice_layouts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "invoice_schemes",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "item_attribute_master",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "item_code_settings",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "item_import_errors",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "item_name",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "items_age_slab",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "label_configs",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "ledger_master",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "mfg_ingredient_groups",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "notification_templates",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "performanceslab",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "pos_counter_master",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "pos_voucher",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "printers",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "procurement_types",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "product_racks",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "products",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "purchase_groups",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "purchase_invoice",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "purchase_invoice_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "purchase_invoice_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "purchase_term",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "reference_counts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "res_tables",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_add_term",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_charge_masters",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_invoice",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_invoice_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_invoice_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_person_master",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_return",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_return_calculations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_return_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_term_name",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "selling_price_groups",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
     {
         "parent_table": "stock_adjustment",
         "children": false,
@@ -93,6 +751,98 @@
     },
     {
         "parent_table": "stockpoint",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "subscriptions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "tax_rates",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "tax_regions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "term_name",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "transaction_payments",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "transactions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "types_of_services",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "unique_code",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "units",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "user_financial_years",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "user_permissions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    
+    {
+        "parent_table": "variation_templates",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "warranties",
         "children": false,
         "parent_key": "id",
         "filter_for_parent": "WHERE business_id IN (43, 44)",
