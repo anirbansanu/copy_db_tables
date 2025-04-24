@@ -27,6 +27,26 @@ class FileManager:
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             return []  # Default to an empty list for any other exceptions
+    
+    def show_filtered_tables(self, tables_to_copy):
+        """Display filtered tables to copy."""
+        # Filter tables_to_copy to only include parent table name and child table names
+        filtered_tables = []
+        for table in tables_to_copy:
+            parent_table = table.get('parent_table')
+            child_tables = table.get('child_tables', [])
+            # filtered_entry = {
+            #     'parent_table': parent_table,
+            #     # 'child_tables': [child.get('child_table') for child in child_tables]
+            # }
+            filtered_tables.append(parent_table)
+            for child in child_tables:
+                child_table = child.get('child_table')
+                # print(f"Child table: {child}")
+                filtered_tables.append(child_table)
+             # Print the filtered tables
+        print()
+        print(f"All tables name : {filtered_tables}")
 
 class TableCopier:
     def __init__(self, config, source_db, target_db, tables_to_copy):
@@ -274,27 +294,8 @@ if __name__ == "__main__":
     # Load data from tables_to_copy.json
     file_manager = FileManager(r"tables_to_copy.json")
     tables_to_copy = file_manager.load_json()
-    # print(f"Loaded tables to copy: {tables_to_copy}")
-    # Filter tables_to_copy to only include parent table name and child table names
-    filtered_tables = []
-    for table in tables_to_copy:
-        parent_table = table.get('parent_table')
-        child_tables = table.get('child_tables', [])
-        # filtered_entry = {
-        #     'parent_table': parent_table,
-        #     # 'child_tables': [child.get('child_table') for child in child_tables]
-        # }
-        filtered_tables.append(parent_table)
-        for child in child_tables:
-            child_table = child.get('child_table')
-            # print(f"Child table: {child}")
-            filtered_tables.append(child_table)
-           
         
-
-    # Print the filtered tables
-    print()
-    print(f"Filtered tables to copy: {filtered_tables}")
+    file_manager.show_filtered_tables(tables_to_copy)
     
-    # copier = TableCopier(config, source_db, target_db, tables_to_copy)
-    # copier.copy_tables()
+    copier = TableCopier(config, source_db, target_db, tables_to_copy)
+    copier.copy_tables()
