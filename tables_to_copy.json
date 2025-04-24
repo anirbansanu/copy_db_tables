@@ -1,0 +1,101 @@
+[
+    
+    {
+        "parent_table": "stock_adjustment",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_end_bit_adj",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_end_bit_adj_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_end_bit_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_end_bit_wizard",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_packet_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_packets",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_transfer_location_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_transfer_locations",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_transfer_received",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_transfer_received_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stock_transfer_tax_invoice",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "stockpoint",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    }
+]

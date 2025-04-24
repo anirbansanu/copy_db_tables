@@ -2,6 +2,31 @@ from datetime import datetime
 import mysql.connector
 import os
 import logging
+import json
+
+class FileManager:
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def load_json(self):
+        """Load JSON data from the file."""
+        try:
+            if not os.path.exists(self.file_path):
+                raise FileNotFoundError(f"File '{self.file_path}' not found.")
+
+            with open(self.file_path, 'r') as file:
+                data = json.load(file)
+                print(f"Successfully loaded data from '{self.file_path}'.")
+                return data
+        except FileNotFoundError as e:
+            print(f"Error: {e}")
+            return []  # Default to an empty list if the file is missing
+        except json.JSONDecodeError as e:
+            print(f"Error: Failed to parse JSON in '{self.file_path}': {e}")
+            return []  # Default to an empty list if JSON is invalid
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+            return []  # Default to an empty list for any other exceptions
 
 class TableCopier:
     def __init__(self, config, source_db, target_db, tables_to_copy):
@@ -217,34 +242,59 @@ if __name__ == "__main__":
     source_db = 'orbite_db'
     target_db = 'srihari_db'
 
-    tables_to_copy = [
-        {
-            'parent_table': 'grc',
-            'children': True,
-            'child_tables': [
-                {
-                    'child_table': 'grc_items',
-                    'child_foreign_key': 'grc_id',
-                    'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
-                },
-                {
-                    'child_table': 'grc_calculated_values',
-                    'child_foreign_key': 'grc_id',
-                    'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
-                }
-            ],
-            'parent_key': 'id',
-            'filter_for_parent': 'WHERE business_id IN (43, 44)',
-            'match_columns': True
-        },
-        {
-            'parent_table': 'items',
-            'children': False,
-            'parent_key': 'id',
-            'filter_for_parent': 'WHERE business_id IN (43, 44)',
-            'match_columns': True
-        }
-    ]
+    # tables_to_copy = [
+    #     {
+    #         'parent_table': 'grc',
+    #         'children': True,
+    #         'child_tables': [
+    #             {
+    #                 'child_table': 'grc_items',
+    #                 'child_foreign_key': 'grc_id',
+    #                 'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
+    #             },
+    #             {
+    #                 'child_table': 'grc_calculated_values',
+    #                 'child_foreign_key': 'grc_id',
+    #                 'filter_for_child': 'grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))'
+    #             }
+    #         ],
+    #         'parent_key': 'id',
+    #         'filter_for_parent': 'WHERE business_id IN (43, 44)',
+    #         'match_columns': True
+    #     },
+    #     {
+    #         'parent_table': 'items',
+    #         'children': False,
+    #         'parent_key': 'id',
+    #         'filter_for_parent': 'WHERE business_id IN (43, 44)',
+    #         'match_columns': True
+    #     }
+    # ]
 
-    copier = TableCopier(config, source_db, target_db, tables_to_copy)
-    copier.copy_tables()
+    # Load data from tables_to_copy.json
+    file_manager = FileManager(r"tables_to_copy.json")
+    tables_to_copy = file_manager.load_json()
+    # print(f"Loaded tables to copy: {tables_to_copy}")
+    # Filter tables_to_copy to only include parent table name and child table names
+    filtered_tables = []
+    for table in tables_to_copy:
+        parent_table = table.get('parent_table')
+        child_tables = table.get('child_tables', [])
+        # filtered_entry = {
+        #     'parent_table': parent_table,
+        #     # 'child_tables': [child.get('child_table') for child in child_tables]
+        # }
+        filtered_tables.append(parent_table)
+        for child in child_tables:
+            child_table = child.get('child_table')
+            # print(f"Child table: {child}")
+            filtered_tables.append(child_table)
+           
+        
+
+    # Print the filtered tables
+    print()
+    print(f"Filtered tables to copy: {filtered_tables}")
+    
+    # copier = TableCopier(config, source_db, target_db, tables_to_copy)
+    # copier.copy_tables()
