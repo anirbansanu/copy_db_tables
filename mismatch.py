@@ -38,7 +38,8 @@ class FileManager:
             for child in child_tables:
                 child_table = child.get('child_table')
                 filtered_tables.append(child_table)
-        print(f"All table names: {filtered_tables}")
+        # print(f"All table names: {filtered_tables}")
+        print(f"Total number of tables to copy: {len(filtered_tables)}")
         return filtered_tables
 
 
