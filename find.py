@@ -1,15 +1,14 @@
-from sqlalchemy import create_engine, inspect, MetaData
-from sqlalchemy.engine import reflection
+from sqlalchemy import create_engine, inspect
 import os
 import logging
-import pprint
+import json
 from datetime import datetime
 
 
 class DatabaseInspector:
     def __init__(self, database_url):
         self.engine = create_engine(database_url)
-        self.inspector = inspect(self.engine) 
+        self.inspector = inspect(self.engine)
 
     def get_all_tables(self):
         """Retrieve all table names from the database."""
@@ -24,6 +23,10 @@ class DatabaseInspector:
         pk_constraint = self.inspector.get_pk_constraint(table_name)
         constrained_columns = pk_constraint.get('constrained_columns', [])
         return constrained_columns[0] if constrained_columns else None
+
+    def get_columns(self, table_name):
+        """Retrieve all column names for a given table."""
+        return [col['name'] for col in self.inspector.get_columns(table_name)]
 
 
 class TableRelationshipBuilder:
@@ -67,6 +70,14 @@ class TableRelationshipBuilder:
         tables_to_copy = []
 
         for parent_table in all_tables:
+            # Validate if the table contains a 'business_id' column
+            columns = self.database_inspector.get_columns(parent_table)
+            if 'business_id' not in columns:
+                warning_message = f"Warning: Table '{parent_table}' does not contain a 'business_id' column. Skipping."
+                print(warning_message)
+                self.log_warning(warning_message)
+                continue
+
             parent_key = self.database_inspector.get_primary_key(parent_table)
             if not parent_key:
                 warning_message = f"Warning: Table '{parent_table}' does not have a primary key. Skipping."
@@ -107,7 +118,7 @@ class TableCopyManager:
         self.database_inspector = DatabaseInspector(database_url)
         self.relationship_builder = TableRelationshipBuilder(self.database_inspector, business_ids, log_dir)
         self.log_dir = log_dir
-        self.tables_to_copy_path = os.path.join(log_dir, "tables_to_copy.txt")
+        self.tables_to_copy_path = os.path.join(log_dir, "tables_to_copy.json")
         self.error_log_path = os.path.join(log_dir, "errors.log")
         self.setup_logging()
 
@@ -121,9 +132,9 @@ class TableCopyManager:
         self.error_log.flush()
 
     def write_tables_to_copy(self, tables_to_copy):
-        """Write the tables_to_copy list to a file."""
+        """Write the tables_to_copy list to a file in a human-readable JSON format."""
         with open(self.tables_to_copy_path, "w") as file:
-            file.write(pprint.pformat(tables_to_copy))
+            json.dump(tables_to_copy, file, indent=4)
 
     def get_tables_to_copy(self):
         """Get the list of tables to copy."""
@@ -155,6 +166,6 @@ if __name__ == '__main__':
     # Get the tables to copy
     try:
         tables_to_copy = table_copy_manager.get_tables_to_copy()
-        print("Tables to copy have been written to 'tables_to_copy.txt'.")
+        print("Tables to copy have been written to 'tables_to_copy.json'.")
     except Exception as e:
         print(f"An error occurred: {str(e)}")
