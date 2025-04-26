@@ -3,7 +3,7 @@
         "parent_table": "account_types",
         "children": false,
         "parent_key": "id",
-        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "filter_for_parent": "",
         "match_columns": true
     },
     {

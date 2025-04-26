@@ -2,3 +2,4 @@
 find_logs
 __pycache__
 mismatch_logs
+analyzer_log
