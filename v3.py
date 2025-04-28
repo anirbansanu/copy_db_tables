@@ -83,16 +83,45 @@ class TableCopier:
         return [row[0] for row in cursor.fetchall()]
 
     def get_table_row_count(self, cursor, db, table_name, filter_condition=''):
-        checkWhereIsInString = filter_condition.find('WHERE')
-        if checkWhereIsInString == -1:
-            filter_condition = f"WHERE {filter_condition}"
-        elif checkWhereIsInString == 0:
-            filter_condition = f"{filter_condition}"
-        else:
-            filter_condition = f"WHERE {filter_condition}"  
-        query = f"SELECT COUNT(*) FROM `{db}`.`{table_name}` {filter_condition}"
-        cursor.execute(query)
-        return cursor.fetchone()[0]
+        """Retrieve the row count for a table with an optional filter."""
+        try:
+            # Ensure filter_condition is properly formatted
+            checkWhereIsInString = filter_condition.find('WHERE')
+            if filter_condition.strip():
+                if checkWhereIsInString == -1:
+                    filter_condition = f"WHERE {filter_condition}"
+                elif checkWhereIsInString == 0:
+                    filter_condition = f"{filter_condition}"
+                else:
+                    filter_condition = f"WHERE {filter_condition}"
+            else:
+                filter_condition = ""
+
+            # Construct and execute the query
+            query = f"SELECT COUNT(*) FROM `{db}`.`{table_name}` {filter_condition}"
+            # print(f"Executing query: {query}")  # Debugging output
+            cursor.execute(query)
+            return cursor.fetchone()[0]
+
+        except mysql.connector.Error as err:
+            # Log the error details
+            error_message = (
+                f"Error while retrieving row count for table '{table_name}' in database '{db}':\n"
+                f"Error Code: {err.errno}\n"
+                f"SQL State: {err.sqlstate}\n"
+                f"Message: {err.msg}\n"
+                f"Full Error: {str(err)}"
+            )
+            print(error_message)
+            self.log_file(self.failure_log, error_message)
+            return 0  # Return 0 as a fallback in case of an error
+
+        except Exception as e:
+            # Handle any other unexpected exceptions
+            error_message = f"Unexpected error while retrieving row count for table '{table_name}': {str(e)}"
+            print(error_message)
+            self.log_file(self.failure_log, error_message)
+            return 0  # Return 0 as a fallback in case of an error
 
     def check_column_match(self, cursor, table_info):
         parent_table = table_info['parent_table']
@@ -201,9 +230,12 @@ class TableCopier:
             self.log_file(self.success_log, f"Child table '{child_table}' copied successfully.")
 
     def copy_tables(self):
+        query = ""
         try:
             conn = mysql.connector.connect(**self.config)
             cursor = conn.cursor()
+            print("Connected to the database.")
+            print(f"Source Database: {self.source_db}")
 
             for table_info in self.tables_to_copy:
                 if not self.check_column_match(cursor, table_info):
@@ -216,17 +248,31 @@ class TableCopier:
                     filter_for_parent = table_info.get('filter_for_parent', '')
 
                     # Display table name and row count
-                    row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
-                    print(f"Table: {parent_table}, Rows: {row_count}")
-                    user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n): ").strip().lower()
+                    source_row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
+                    print(f"Table: {parent_table}, Rows: {source_row_count}")
+                    user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n/t/ft): ").strip().lower()
+
+                    if user_input == 't':
+                        print("\nUser Terminated the process.")
+                        self.log_file(self.success_log, f"User Terminated the process.")
+                        break
+                    elif user_input == 'ft':
+                        print("\nUser Fully Terminated the process without saving data.")
+                        self.log_file(self.success_log, f"User Fully Terminated the process without saving data.")
+                        exit()
+
                     if user_input != 'y':
                         print(f"Skipping table '{parent_table}'.")
                         self.log_file(self.failure_log, f"Table '{parent_table}' skipped by user.")
                         continue
+                    
 
-                    cursor.execute(f"""
-                        SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}
-                    """)
+                    if filter_for_parent.strip():
+                        query = f"SELECT * FROM `{self.source_db}`.`{parent_table}` {filter_for_parent}"
+                    else:
+                        query = f"SELECT * FROM `{self.source_db}`.`{parent_table}`"
+                    
+                    cursor.execute(query)
                     rows = cursor.fetchall()
                     columns = [f"`{desc[0]}`" for desc in cursor.description]
                     placeholders = ', '.join(['%s'] * len(columns))
@@ -235,13 +281,37 @@ class TableCopier:
                         INSERT INTO `{self.target_db}`.`{parent_table}` ({', '.join(columns)}) VALUES ({placeholders})
                     """
                     cursor.executemany(insert_query, rows)
-                    self.log_file(self.success_log, f"Standalone table '{parent_table}' copied successfully.")
+
+                    target_row_count = self.get_table_row_count(cursor, self.target_db, parent_table, filter_for_parent)
+
+                    if source_row_count == target_row_count:
+                        success_message = (
+                            f"Standalone table '{parent_table}' copied successfully. "
+                            f"Rows copied: {target_row_count}."
+                        )
+                        self.log_file(self.success_log, success_message)
+                        print(success_message)
+                        
+                    else:
+                        error_message = (
+                            f"Error: Row count mismatch for table '{parent_table}'. "
+                            f"Source rows: {source_row_count}, Target rows: {target_row_count}."
+                        )
+                        self.log_file(self.failure_log, error_message)
+                        print(error_message)
 
             conn.commit()
 
         except mysql.connector.Error as err:
-            self.log_file(self.failure_log, f"Error: {str(err)}")
-            print(f"Connection error: {err}")
+            error_message = (
+                f"Error Code: {err.errno}\n"
+                f"SQL State: {err.sqlstate}\n"
+                f"Message: {err.msg}\n"
+                f"Full Error: {str(err)}\n"
+                f"Query: {query}"
+            )
+            self.log_file(self.failure_log, error_message)
+            print(f"Connection error:\n{error_message}")
 
         finally:
             cursor.close()
