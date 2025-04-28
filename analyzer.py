@@ -146,14 +146,18 @@ class MySQLSchemaComparator:
                 WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s
             """
             cursor.execute(query, (db_name, table))
-            columns = {row['COLUMN_NAME'] for row in cursor.fetchall()}
+            columns = {row['COLUMN_NAME'] for row in cursor.fetchall()}  # Fetch all rows
             self.log_success(f"Retrieved columns for table '{table}': {columns}")
             return columns
         except mysql.connector.Error as err:
-            error_message = f"Failed to retrieve columns for table '{table}': {err}"
+            error_message = f"Failed to retrieve columns for table '{db_name}'.'{table}': {err}"
             print(error_message)
             self.log_failure(error_message)
             return set()
+        finally:
+            # Clear any unread results
+            while cursor.nextset():
+                pass
 
     def get_primary_key(self, cursor, db_name, table):
         """Retrieve primary key column for a table, or empty string if none."""
@@ -229,7 +233,7 @@ if __name__ == '__main__':
         user='root',
         password='root',
         source_db='orbite_db',
-        target_db='srihari_db'
+        target_db='srihari_db_new'
     )
     result = comparator.build_tables_to_copy()
     # pprint.pprint(result)
