@@ -1,0 +1,66 @@
+[
+    {
+        "parent_table": "cash_registers",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "sales_invoice",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": false
+    },
+    {
+        "parent_table": "grc",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grc_calculated_values",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))",
+        "match_columns": true
+    },
+    {
+        "parent_table": "grc_items",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE grc_id IN (SELECT id FROM grc WHERE business_id IN (43, 44))",
+        "match_columns": true
+    },
+    {
+        "parent_table": "contacts",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43, 44)",
+        "match_columns": false
+    },
+    {
+        "parent_table": "supplier_details",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE contact_id IN (SELECT id FROM contacts WHERE business_id IN (43, 44))",
+        "match_columns": true
+    },
+    {
+        "parent_table": "customer_details",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE contact_id IN (SELECT id FROM contacts WHERE business_id IN (43, 44))",
+        "match_columns": true
+    },
+    {
+        "parent_table": "vendor_details",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE contact_id IN (SELECT id FROM contacts WHERE business_id IN (43, 44))",
+        "match_columns": true
+    }
+   
+]

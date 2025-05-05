@@ -157,11 +157,21 @@ class TableCopier:
         # Display table name and row count
         parent_row_count = self.get_table_row_count(cursor, self.source_db, parent_table, filter_for_parent)
         print(f"Table: {parent_table}, Rows: {parent_row_count}")
-        user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n): ").strip().lower()
+        user_input = input(f"Do you want to copy the table '{parent_table}'? (y/n/t/ft): ").strip().lower()
+
+        if user_input == 't':
+            print("\nUser Terminated the process.")
+            self.log_file(self.success_log, f"User Terminated the process.")
+            return False
+        elif user_input == 'ft':
+            print("\nUser Fully Terminated the process without saving data.")
+            self.log_file(self.success_log, f"User Fully Terminated the process without saving data.")
+            exit()
+
         if user_input != 'y':
             print(f"Skipping table '{parent_table}'.")
             self.log_file(self.failure_log, f"Table '{parent_table}' skipped by user.")
-            return
+            exit()
 
         # Copy parent table
         cursor.execute(f"TRUNCATE TABLE `{self.target_db}`.`{parent_table}`")
@@ -326,11 +336,11 @@ if __name__ == "__main__":
         'user': 'root',
         'password': 'root',
         'host': 'localhost',
-        'database': 'orbite_db'
+        'database': 'orbite_db_03_05_2025'
     }
 
-    source_db = 'orbite_db'
-    target_db = 'srihari_db'
+    source_db = 'orbite_db_03_05_2025'
+    target_db = 'srihari_db_new'
 
     # tables_to_copy = [
     #     {
@@ -362,7 +372,7 @@ if __name__ == "__main__":
     # ]
 
     # Load data from tables_to_copy.json
-    file_manager = FileManager(r"tables_to_copy.json")
+    file_manager = FileManager(r"tables_to_copy_V3.json")
     tables_to_copy = file_manager.load_json()
         
     file_manager.show_filtered_tables(tables_to_copy)
