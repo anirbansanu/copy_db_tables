@@ -1,0 +1,267 @@
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM business;
+
+INSERT INTO `business` (`id`, `name`, `aws_img_path`, `short_name`, `parent_id`, `currency_id`, `start_date`, `tax_number_1`, `tax_label_1`, `tax_number_2`, `tax_label_2`, `code_label_1`, `code_1`, `code_label_2`, `code_2`, `default_sales_tax`, `default_profit_percent`, `owner_id`, `time_zone`, `fy_start_month`, `accounting_method`, `default_sales_discount`, `sell_price_tax`, `logo`, `sku_prefix`, `enable_product_expiry`, `expiry_type`, `on_product_expiry`, `stop_selling_before`, `enable_tooltip`, `purchase_in_diff_currency`, `purchase_currency_id`, `p_exchange_rate`, `transaction_edit_days`, `stock_expiry_alert_days`, `keyboard_shortcuts`, `pos_settings`, `essentials_settings`, `manufacturing_settings`, `weighing_scale_setting`, `enable_brand`, `enable_category`, `enable_sub_category`, `enable_price_tax`, `enable_purchase_status`, `enable_lot_number`, `default_unit`, `enable_sub_units`, `enable_racks`, `enable_row`, `enable_position`, `enable_editing_product_from_purchase`, `sales_cmsn_agnt`, `item_addition_method`, `enable_inline_tax`, `pos_item_name_search_enable`, `currency_symbol_placement`, `enabled_modules`, `date_format`, `time_format`, `ref_no_prefixes`, `theme_color`, `created_by`, `enable_rp`, `rp_name`, `amount_for_unit_rp`, `min_order_total_for_rp`, `max_rp_per_order`, `redeem_amount_per_unit_rp`, `min_order_total_for_redeem`, `min_redeem_point`, `max_redeem_point`, `rp_expiry_period`, `rp_expiry_type`, `email_settings`, `sms_settings`, `custom_labels`, `common_settings`, `intercompany_show_actual_supplier`, `is_active`, `update_quantity_on_scan`, `item_scan_limit`, `created_at`, `updated_at`) VALUES
+(43, 'Srihari Ventures', '', NULL, NULL, 53, '2025-01-20', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25.00, 82, 'Asia/Kolkata', 4, 'fifo', NULL, 'includes', NULL, NULL, 0, 'add_expiry', 'keep_selling', 0, 1, 0, NULL, '1.000', 30, 30, '{\"pos\":{\"express_checkout\":\"shift+e\",\"pay_n_ckeckout\":\"shift+p\",\"draft\":\"shift+d\",\"cancel\":\"shift+c\",\"edit_discount\":\"shift+i\",\"edit_order_tax\":\"shift+t\",\"add_payment_row\":\"shift+r\",\"finalize_payment\":\"shift+f\",\"recent_product_quantity\":\"f2\",\"add_new_product\":\"f4\"}}', '{\"cmmsn_calculation_type\":\"invoice_value\",\"amount_rounding_method\":null,\"razor_pay_key_id\":null,\"razor_pay_key_secret\":null,\"stripe_public_key\":null,\"stripe_secret_key\":null,\"enable_transaction_date\":\"1\",\"inline_service_staff\":\"1\",\"is_service_staff_required\":\"0\",\"cash_denominations\":null,\"disable_pay_checkout\":0,\"disable_draft\":0,\"disable_express_checkout\":0,\"hide_product_suggestion\":0,\"hide_recent_trans\":0,\"disable_discount\":0,\"disable_order_tax\":0,\"is_pos_subtotal_editable\":0}', NULL, NULL, '', 1, 1, 1, 1, 1, 0, NULL, 0, 0, 0, 0, 1, NULL, 1, 0, 1, 'before', '[\"purchases\",\"add_sale\",\"pos_sale\",\"stock_transfers\",\"stock_adjustment\",\"expenses\",\"service_staff\"]', 'd/m/Y', '24', '{\"purchase\":\"PO\",\"stock_transfer\":\"ST\",\"stock_adjustment\":\"SA\",\"sell_return\":\"CN\",\"expense\":\"EP\",\"contacts\":\"CO\",\"purchase_payment\":\"PP\",\"sell_payment\":\"SP\",\"business_location\":\"BL\"}', NULL, 1, 0, NULL, '1.0000', '1.0000', NULL, '1.0000', '1.0000', NULL, NULL, NULL, 'year', NULL, NULL, NULL, NULL, 0, 1, 1, 6, '2025-01-20 14:39:23', '2025-01-20 14:39:23'),
+(44, 'SRIHARI MOTOSPORT', NULL, NULL, 43, 53, '2025-03-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25.00, 82, 'Asia/Kolkata', 4, 'fifo', NULL, 'includes', NULL, NULL, 0, 'add_expiry', 'keep_selling', 0, 1, 0, NULL, '1.000', 30, 30, '{\"pos\":{\"express_checkout\":\"shift+e\",\"pay_n_ckeckout\":\"shift+p\",\"draft\":\"shift+d\",\"cancel\":\"shift+c\",\"edit_discount\":\"shift+i\",\"edit_order_tax\":\"shift+t\",\"add_payment_row\":\"shift+r\",\"finalize_payment\":\"shift+f\",\"recent_product_quantity\":\"f2\",\"add_new_product\":\"f4\"}}', '{\"cmmsn_calculation_type\":\"invoice_value\",\"amount_rounding_method\":null,\"razor_pay_key_id\":null,\"razor_pay_key_secret\":null,\"stripe_public_key\":null,\"stripe_secret_key\":null,\"enable_transaction_date\":\"1\",\"inline_service_staff\":\"1\",\"is_service_staff_required\":\"0\",\"cash_denominations\":null,\"disable_pay_checkout\":0,\"disable_draft\":0,\"disable_express_checkout\":0,\"hide_product_suggestion\":0,\"hide_recent_trans\":0,\"disable_discount\":0,\"disable_order_tax\":0,\"is_pos_subtotal_editable\":0}', NULL, NULL, '', 1, 1, 1, 1, 1, 0, NULL, 0, 0, 0, 0, 1, NULL, 1, 0, 0, 'before', '[\"purchases\",\"add_sale\",\"pos_sale\",\"stock_transfers\",\"stock_adjustment\",\"expenses\",\"service_staff\"]', 'd/m/Y', '24', '{\"purchase\":\"PO\",\"stock_transfer\":\"ST\",\"stock_adjustment\":\"SA\",\"sell_return\":\"CN\",\"expense\":\"EP\",\"contacts\":\"CO\",\"purchase_payment\":\"PP\",\"sell_payment\":\"SP\",\"business_location\":\"BL\"}', NULL, 1, 0, NULL, '1.0000', '1.0000', NULL, '1.0000', '1.0000', NULL, NULL, NULL, 'year', NULL, NULL, NULL, NULL, 0, 1, 1, 6, '2025-03-11 06:48:59', '2025-03-11 06:48:59'),
+(45, 'Srihari Agencies', NULL, NULL, 43, 53, '2025-03-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25.00, 82, 'Asia/Kolkata', 4, 'fifo', NULL, 'includes', NULL, NULL, 0, 'add_expiry', 'keep_selling', 0, 1, 0, NULL, '1.000', 30, 30, '{\"pos\":{\"express_checkout\":\"shift+e\",\"pay_n_ckeckout\":\"shift+p\",\"draft\":\"shift+d\",\"cancel\":\"shift+c\",\"edit_discount\":\"shift+i\",\"edit_order_tax\":\"shift+t\",\"add_payment_row\":\"shift+r\",\"finalize_payment\":\"shift+f\",\"recent_product_quantity\":\"f2\",\"add_new_product\":\"f4\"}}', '{\"cmmsn_calculation_type\":\"invoice_value\",\"amount_rounding_method\":null,\"razor_pay_key_id\":null,\"razor_pay_key_secret\":null,\"stripe_public_key\":null,\"stripe_secret_key\":null,\"enable_transaction_date\":\"1\",\"inline_service_staff\":\"1\",\"is_service_staff_required\":\"0\",\"cash_denominations\":null,\"disable_pay_checkout\":0,\"disable_draft\":0,\"disable_express_checkout\":0,\"hide_product_suggestion\":0,\"hide_recent_trans\":0,\"disable_discount\":0,\"disable_order_tax\":0,\"is_pos_subtotal_editable\":0}', NULL, NULL, '', 1, 1, 1, 1, 1, 0, NULL, 0, 0, 0, 0, 1, NULL, 1, 0, 0, 'before', '[\"purchases\",\"add_sale\",\"pos_sale\",\"stock_transfers\",\"stock_adjustment\",\"expenses\",\"service_staff\"]', 'd/m/Y', '24', '{\"purchase\":\"PO\",\"stock_transfer\":\"ST\",\"stock_adjustment\":\"SA\",\"sell_return\":\"CN\",\"expense\":\"EP\",\"contacts\":\"CO\",\"purchase_payment\":\"PP\",\"sell_payment\":\"SP\",\"business_location\":\"BL\"}', NULL, 1, 0, NULL, '1.0000', '1.0000', NULL, '1.0000', '1.0000', NULL, NULL, NULL, 'year', NULL, NULL, NULL, NULL, 0, 1, 1, 6, '2025-03-11 06:48:59', '2025-03-11 06:48:59'),
+(46, 'Srihari Enterprises', NULL, NULL, 43, 53, '2025-03-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25.00, 82, 'Asia/Kolkata', 4, 'fifo', NULL, 'includes', NULL, NULL, 0, 'add_expiry', 'keep_selling', 0, 1, 0, NULL, '1.000', 30, 30, '{\"pos\":{\"express_checkout\":\"shift+e\",\"pay_n_ckeckout\":\"shift+p\",\"draft\":\"shift+d\",\"cancel\":\"shift+c\",\"edit_discount\":\"shift+i\",\"edit_order_tax\":\"shift+t\",\"add_payment_row\":\"shift+r\",\"finalize_payment\":\"shift+f\",\"recent_product_quantity\":\"f2\",\"add_new_product\":\"f4\"}}', '{\"cmmsn_calculation_type\":\"invoice_value\",\"amount_rounding_method\":null,\"razor_pay_key_id\":null,\"razor_pay_key_secret\":null,\"stripe_public_key\":null,\"stripe_secret_key\":null,\"enable_transaction_date\":\"1\",\"inline_service_staff\":\"1\",\"is_service_staff_required\":\"0\",\"cash_denominations\":null,\"disable_pay_checkout\":0,\"disable_draft\":0,\"disable_express_checkout\":0,\"hide_product_suggestion\":0,\"hide_recent_trans\":0,\"disable_discount\":0,\"disable_order_tax\":0,\"is_pos_subtotal_editable\":0}', NULL, NULL, '', 1, 1, 1, 1, 1, 0, NULL, 0, 0, 0, 0, 1, NULL, 1, 0, 0, 'before', '[\"purchases\",\"add_sale\",\"pos_sale\",\"stock_transfers\",\"stock_adjustment\",\"expenses\",\"service_staff\"]', 'd/m/Y', '24', '{\"purchase\":\"PO\",\"stock_transfer\":\"ST\",\"stock_adjustment\":\"SA\",\"sell_return\":\"CN\",\"expense\":\"EP\",\"contacts\":\"CO\",\"purchase_payment\":\"PP\",\"sell_payment\":\"SP\",\"business_location\":\"BL\"}', NULL, 1, 0, NULL, '1.0000', '1.0000', NULL, '1.0000', '1.0000', NULL, NULL, NULL, 'year', NULL, NULL, NULL, NULL, 0, 1, 1, 6, '2025-03-11 06:48:59', '2025-03-11 06:48:59');
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+UPDATE `business_locations` SET `business_id` = '46' WHERE `business_locations`.`id` = 78;
+UPDATE `business_locations` SET `business_id` = '45' WHERE `business_locations`.`id` = 81;
+UPDATE `business_locations` SET `business_id` = '44' WHERE `business_locations`.`id` = 80;
+
+
+UPDATE stock_items
+JOIN business_locations ON stock_items.location_id = business_locations.id
+SET stock_items.business_id = business_locations.business_id;
+
+
+UPDATE items
+JOIN stock_items ON stock_items.item_id = items.id
+SET items.business_id = stock_items.business_id;
+
+
+UPDATE grc
+JOIN business_locations ON grc.location_id = business_locations.id
+SET grc.business_id = business_locations.business_id;
+
+
+UPDATE grc_calculated_values
+JOIN grc ON grc.id = grc_calculated_values.grc_id
+SET grc_calculated_values.business_id = grc.business_id;
+
+
+
+
+UPDATE purchase_invoice
+JOIN business_locations ON purchase_invoice.location_id = business_locations.id
+SET purchase_invoice.business_id = business_locations.business_id;
+
+UPDATE purchase_invoice_calculations
+JOIN purchase_invoice ON purchase_invoice.id = purchase_invoice_calculations.purchase_invite_id
+SET purchase_invoice_calculations.business_id = purchase_invoice.business_id;
+
+UPDATE purchase_invoice_items
+JOIN purchase_invoice ON purchase_invoice.id = purchase_invoice_items.purchase_invite_id
+SET purchase_invoice_items.business_id = purchase_invoice.business_id;
+
+
+
+
+-- STOCK_ADJUSTMENT
+
+UPDATE stock_adjustment
+JOIN business_locations ON stock_adjustment.location_id = business_locations.id
+SET stock_adjustment.business_id = business_locations.business_id;
+
+-- dont found any line items ??
+
+UPDATE stockpoint
+JOIN business_locations ON stockpoint.location_id = business_locations.id
+SET stockpoint.business_id = business_locations.business_id;
+
+-- TRANSACTIONS
+UPDATE transactions
+JOIN business_locations ON transactions.location_id = business_locations.id
+SET transactions.business_id = business_locations.business_id;
+
+UPDATE transaction_payments
+JOIN transactions ON transactions.id = transaction_payments.transaction_id
+SET transaction_payments.business_id = transactions.business_id;
+
+-- All queries ran up to this line
+
+
+-- For business_id = 44
+INSERT INTO attribute (attribute_name, attribute_value, business_id, sort_order, created_by, created_at, updated_at)
+SELECT attribute_name, attribute_value, 44, sort_order, created_by, NOW(), NOW()
+FROM attribute
+WHERE business_id = 43;
+
+-- For business_id = 45
+INSERT INTO attribute (attribute_name, attribute_value, business_id, sort_order, created_by, created_at, updated_at)
+SELECT attribute_name, attribute_value, 45, sort_order, created_by, NOW(), NOW()
+FROM attribute
+WHERE business_id = 43;
+
+-- For business_id = 46
+INSERT INTO attribute (attribute_name, attribute_value, business_id, sort_order, created_by, created_at, updated_at)
+SELECT attribute_name, attribute_value, 46, sort_order, created_by, NOW(), NOW()
+FROM attribute
+WHERE business_id = 43;
+
+
+
+
+UPDATE attribute_item_map 
+JOIN items on items.id = attribute_item_map.item_id
+SET attribute_item_map.business_id = items.business_id;
+
+
+UPDATE attribute_item_map 
+JOIN attribute on attribute.business_id = attribute_item_map.business_id
+SET attribute_item_map.attribute_id = attribute.id;
+
+
+-- INSERT INTO `barcodes` (`id`, `name`, `description`, `width`, `height`, `paper_width`, `paper_height`, `top_margin`, `left_margin`, `row_distance`, `col_distance`, `stickers_in_one_row`, `is_default`, `is_continuous`, `stickers_in_one_sheet`, `business_id`, `unit`, `created_at`, `updated_at`) VALUES
+-- (24, 'SH 60.00mm * 40.00mm', 'Label Size 60.00mm * 50.00mm ( width 60mm and height 50mm )', 60.0000, 40.0000, 60.0000, 40.0000, 0.0000, 0.0000, 0.0000, 0.0000, 1, 0, 1, 1, 43, 'mm', '2025-01-27 16:48:32', '2025-01-27 16:48:32');
+
+
+
+
+-- For business_id = 44
+INSERT INTO gst_tax_master (
+  business_id, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, updated_at, deleted_at
+)
+SELECT 
+  44, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, NOW(), deleted_at
+FROM gst_tax_master
+WHERE business_id = 43;
+
+-- For business_id = 45
+INSERT INTO gst_tax_master (
+  business_id, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, updated_at, deleted_at
+)
+SELECT 
+  45, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, NOW(), deleted_at
+FROM gst_tax_master
+WHERE business_id = 43;
+
+-- For business_id = 46
+INSERT INTO gst_tax_master (
+  business_id, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, updated_at, deleted_at
+)
+SELECT 
+  46, tax_name, note, igst, cgst, sgst, cess, status, 
+  created_by, created_at, NOW(), deleted_at
+FROM gst_tax_master
+WHERE business_id = 43;
+
+
+
+
+-- For business_id = 44
+INSERT INTO item_attribute_master (
+  attribute_name, attribute_value, business_id, sort_order, 
+  deleted_at, created_by, created_at, updated_at
+)
+SELECT 
+  attribute_name, attribute_value, '44', sort_order, 
+  deleted_at, created_by, created_at, NOW()
+FROM item_attribute_master
+WHERE business_id = '43';
+
+-- For business_id = 45
+INSERT INTO item_attribute_master (
+  attribute_name, attribute_value, business_id, sort_order, 
+  deleted_at, created_by, created_at, updated_at
+)
+SELECT 
+  attribute_name, attribute_value, '45', sort_order, 
+  deleted_at, created_by, created_at, NOW()
+FROM item_attribute_master
+WHERE business_id = '43';
+
+-- For business_id = 46
+INSERT INTO item_attribute_master (
+  attribute_name, attribute_value, business_id, sort_order, 
+  deleted_at, created_by, created_at, updated_at
+)
+SELECT 
+  attribute_name, attribute_value, '46', sort_order, 
+  deleted_at, created_by, created_at, NOW()
+FROM item_attribute_master
+WHERE business_id = '43';
+
+DELETE FROM `subscriptions`;
+
+INSERT INTO `subscriptions` (`id`, `business_id`, `package_id`, `start_date`, `trial_end_date`, `end_date`, `package_price`, `package_details`, `created_id`, `paid_via`, `payment_transaction_id`, `status`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(39, 43, 1, '2025-01-20', '2026-01-20', '2026-01-20', '0.0000', '{\"location_count\":0,\"user_count\":0,\"product_count\":0,\"invoice_count\":0,\"name\":\"Business\",\"essentials_module\":\"1\",\"manufacturing_module\":\"1\"}', 1, 'offline', '1', 'approved', NULL, '2025-01-20 20:09:23', '2025-01-20 20:09:23'),
+(41, 44, 1, '2025-03-11', '2026-03-11', '2026-03-11', '0.0000', '{\"location_count\":0,\"user_count\":0,\"product_count\":0,\"invoice_count\":0,\"name\":\"Business\",\"essentials_module\":\"1\",\"manufacturing_module\":\"1\"}', 1, 'offline', '1', 'approved', NULL, '2025-03-11 12:18:59', '2025-03-11 12:18:59'),
+(42, 45, 1, '2025-01-20', '2026-01-20', '2026-01-20', '0.0000', '{\"location_count\":0,\"user_count\":0,\"product_count\":0,\"invoice_count\":0,\"name\":\"Business\",\"essentials_module\":\"1\",\"manufacturing_module\":\"1\"}', 1, 'offline', '1', 'approved', NULL, '2025-01-20 20:09:23', '2025-01-20 20:09:23'),
+(43, 46, 1, '2025-03-11', '2026-03-11', '2026-03-11', '0.0000', '{\"location_count\":0,\"user_count\":0,\"product_count\":0,\"invoice_count\":0,\"name\":\"Business\",\"essentials_module\":\"1\",\"manufacturing_module\":\"1\"}', 1, 'offline', '1', 'approved', NULL, '2025-03-11 12:18:59', '2025-03-11 12:18:59');
+
+
+INSERT INTO `contacts` VALUES 
+(10457,45,43,'customer','Wholesale','individual',NULL,'29AAACC1206D2ZB','Srihari Agencies',NULL,NULL,'Mr Srihari Agencies','Mr','Srihari Agencies',NULL,NULL,'Srihari Agencies','2025-04-28',NULL,NULL,NULL,NULL,NULL,'W3',NULL,'active',NULL,'847','Bengaluru','29','INDIA','35 New Road','35 New Road',NULL,'560098','3453354545',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Bengaluru','29','INDIA','35 New Road','35 New Road',NULL,'560098','3453354545',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,82,0.0000,0,0,0,0,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-28 12:46:41','2025-04-28 12:46:41',0.00),
+(10458,46,43,'customer','Wholesale','individual',NULL,'29AAACC1206D2ZB','Srihari Enterprises',NULL,NULL,'Mr Srihari Enterprises','Mr','Srihari Enterprises',NULL,NULL,'Srihari Enterprises','2025-04-28',NULL,NULL,NULL,NULL,NULL,'W4',NULL,'active',NULL,'847','Bengaluru','29','INDIA','963 Oak Extension','Ipsam repudiandae et','Officia minima ipsam','560099','5634535353',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Bengaluru','29','INDIA','963 Oak Extension','Ipsam repudiandae et','Officia minima ipsam','560099','5634535353',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,82,0.0000,0,0,0,0,NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'2025-04-28 12:48:52','2025-04-28 12:48:52',0.00);
+
+INSERT INTO `customer_details` (
+    id,
+    contact_id,
+    price_list,
+    gst_calculate_on,
+    customer_type,
+    customer_ledger,
+    sales_ledger,
+    sales_return_ledger,
+    region_name,
+    region_short_name,
+    region_assign_name,
+    created_at,
+    updated_at
+) VALUES (
+    null,
+    10457,
+    'On WSP',
+    'CGST + SGST',
+    'B2B-Loacl',
+    2122,
+    2119,
+    2142,
+    'B2B-Loacl',
+    'Sundery Debtor WS',
+    'Sundery Debtor WS',
+    '2025-05-02 21:09:28',
+    '2025-05-02 21:09:28'
+),
+(
+    null,
+    10458,
+    'On WSP',
+    'CGST + SGST',
+    'B2B-Loacl',
+    2122,
+    2119,
+    2142,
+    'B2B-Loacl',
+    'Sundery Debtor WS',
+    'Sundery Debtor WS',
+    '2025-05-02 21:09:28',
+    '2025-05-02 21:09:28'
+);
+
+INSERT INTO inter_company_customers (
+    id,
+    business_id,
+    contact_id,
+    parent_contact_id,
+    child_business_id,
+    created_at,
+    updated_at
+) VALUES (
+    null,
+    43,
+    10457,
+    10453,
+    45,
+    '2025-05-03 02:28:33',
+    '2025-05-02 20:58:33'
+),
+(
+    null,
+    43,
+    10458,
+    10453,
+    46,
+    '2025-05-03 02:28:33',
+    '2025-05-02 20:58:33'
+);
