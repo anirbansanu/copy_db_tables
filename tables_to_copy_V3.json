@@ -59,8 +59,21 @@
         "parent_table": "vendor_details",
         "children": false,
         "parent_key": "id",
-        "filter_for_parent": "WHERE contact_id IN (SELECT id FROM contacts WHERE business_id IN (43, 44))",
+        "filter_for_parent": "WHERE transaction_id IN (SELECT id FROM contacts WHERE business_id IN (43, 44))",
+        "match_columns": true
+    },
+    {
+        "parent_table": "transactions",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE business_id IN (43)",
+        "match_columns": true
+    },
+    {
+        "parent_table": "transaction_sell_lines",
+        "children": false,
+        "parent_key": "id",
+        "filter_for_parent": "WHERE transaction_id IN (SELECT id FROM transactions WHERE business_id IN (43))",
         "match_columns": true
     }
-   
 ]
