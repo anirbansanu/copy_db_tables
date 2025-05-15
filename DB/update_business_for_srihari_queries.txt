@@ -50,7 +50,6 @@ SET purchase_invoice_items.business_id = purchase_invoice.business_id;
 
 
 
-
 -- STOCK_ADJUSTMENT
 
 UPDATE stock_adjustment
@@ -252,3 +251,10 @@ INSERT INTO `sales_term_name`
 (`id`, `name`, `business_id`, `created_at`, `updated_at`, `deleted_at`) VALUES 
 (NULL, '15%', '43', '2025-05-13 01:43:31', '2025-05-13 01:43:31', NULL);
 
+
+
+UPDATE srihari_db.transaction_sell_lines AS tsl 
+  JOIN srihari_db.transactions as t ON t.id = tsl.transaction_id 
+  JOIN reference.gst_tax_master_ref AS gtm ON tsl.tax_id = gtm.ref_id AND t.business_id = gtm.new_business_id 
+SET tsl.tax_id = gtm.new_id 
+WHERE t.business_id IN (44, 45, 46);
